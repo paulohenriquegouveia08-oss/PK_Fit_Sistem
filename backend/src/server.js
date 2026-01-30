@@ -7,6 +7,7 @@ const { apiLimiter } = require('./middleware/rateLimit');
 const authRoutes = require('./routes/auth');
 const academyRoutes = require('./routes/academies');
 const userRoutes = require('./routes/users');
+const academyDashboardRoutes = require('./routes/academyDashboard');
 const { authenticate } = require('./middleware/auth');
 
 const app = express();
@@ -29,6 +30,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/academies', authenticate, academyRoutes); // Protegidas globalmente por auth + role interna
 app.use('/api/users', authenticate, userRoutes);
+app.use('/api/academy-dashboard', authenticate, academyDashboardRoutes); // Dashboard da academia
 
 // Rota 404
 app.use((req, res) => {

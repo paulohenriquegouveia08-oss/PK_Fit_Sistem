@@ -68,4 +68,32 @@ export const userAPI = {
     delete: (id) => api.delete(`/users/${id}`),
 };
 
+// Academy Dashboard API - faz a comunicação com o backend para o dashboard da academia
+export const academyDashboardAPI = {
+    // Stats & Overview
+    getStats: () => api.get('/academy-dashboard/stats'),
+    getActivity: () => api.get('/academy-dashboard/activity'),
+
+    // Users (Professores, Personais, Alunos)
+    listUsers: (params) => api.get('/academy-dashboard/users', { params }),
+    listProfessors: () => api.get('/academy-dashboard/professors'),
+    createUser: (data) => api.post('/academy-dashboard/users', data),
+    updateUser: (id, data) => api.put(`/academy-dashboard/users/${id}`, data),
+    deleteUser: (id) => api.delete(`/academy-dashboard/users/${id}`),
+
+    // Workouts
+    listWorkouts: (params) => api.get('/academy-dashboard/workouts', { params }),
+    createWorkout: (data) => api.post('/academy-dashboard/workouts', data),
+    updateWorkout: (id, data) => api.put(`/academy-dashboard/workouts/${id}`, data),
+    deleteWorkout: (id) => api.delete(`/academy-dashboard/workouts/${id}`),
+
+    // Requests
+    listRequests: (params) => api.get('/academy-dashboard/requests', { params }),
+    processRequest: (id, action) => api.put(`/academy-dashboard/requests/${id}`, action),
+
+    // Academy Settings
+    getAcademy: () => api.get('/academy-dashboard/academy'),
+    updateAcademy: (data) => api.put('/academy-dashboard/academy', data),
+};
+
 export default api;

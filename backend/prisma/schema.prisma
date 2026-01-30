@@ -17,8 +17,15 @@ model User {
   academy_id    String?
   academy       Academy?  @relation(fields: [academy_id], references: [id])
   first_access  Boolean   @default(true)
+  status        String    @default("ACTIVE") // ACTIVE, INACTIVE
+  specialty     String?   // Especialidade (para professores/personais)
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt
+
+  // Relações para treinos
+  studentWorkouts   Workout[]        @relation("StudentWorkouts")
+  professorWorkouts Workout[]        @relation("ProfessorWorkouts")
+  workoutRequests   WorkoutRequest[]
 }
 
 model Academy {
@@ -27,11 +34,55 @@ model Academy {
   cnpj             String    @unique
   responsible_name String?
   phone            String?
+  logo_url         String?
   status           String    @default("ACTIVE") // ACTIVE, INACTIVE
   payment_status   String    @default("PENDING") // PAID, PENDING, OVERDUE, LATE
   payment_plan     String?
   payment_due_date DateTime?
   created_at       DateTime  @default(now())
   updated_at       DateTime  @updatedAt
+
+  // Relações
   users            User[]
+  workouts         Workout[]
+  workoutRequests  WorkoutRequest[]
+}
+
+model Workout {
+  id            String    @id @default(cuid())
+  name          String
+  description   String?
+  model_type    String?   // PPL, ABC, ABCDE, FULLBODY, etc.
+  objective     String?   // HIPERTROFIA, EMAGRECIMENTO, FORÇA, etc.
+  status        String    @default("ACTIVE") // ACTIVE, INACTIVE
+  weekly_split  String?   // JSON com a divisão semanal
+
+  // Relacionamentos
+  student_id    String
+  student       User      @relation("StudentWorkouts", fields: [student_id], references: [id], onDelete: Cascade)
+  professor_id  String?
+  professor     User?     @relation("ProfessorWorkouts", fields: [professor_id], references: [id], onDelete: SetNull)
+  academy_id    String
+  academy       Academy   @relation(fields: [academy_id], references: [id], onDelete: Cascade)
+
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+}
+
+model WorkoutRequest {
+  id            String    @id @default(cuid())
+  type          String    // NOVO_TREINO, TROCA_TREINO, VINCULO_PROFESSOR
+  status        String    @default("PENDING") // PENDING, APPROVED, REJECTED, FORWARDED
+  description   String?
+  response      String?   // Resposta do admin/professor
+
+  // Relacionamentos
+  student_id    String
+  student       User      @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  academy_id    String
+  academy       Academy   @relation(fields: [academy_id], references: [id], onDelete: Cascade)
+  assigned_to   String?   // ID do professor encaminhado (opcional)
+
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
 }
