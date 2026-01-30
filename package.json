@@ -1,16 +1,40 @@
 {
     "name": "pk-fit-system",
     "version": "1.0.0",
-    "description": "Sistema de Gestão para Academias",
-    "scripts": {
-        "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
-        "install:all": "npm install && npm install --prefix backend && npm install --prefix frontend",
-        "seed": "npm run db:seed --prefix backend"
+    "description": "Sistema de Gestão para Academias - PK Fit",
+    "type": "module",
+    "engines": {
+        "node": "18.x"
     },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
+    "scripts": {
+        "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+        "dev:client": "vite",
+        "dev:server": "node --watch src/server/server.js",
+        "build": "vite build",
+        "start": "node src/server/server.js",
+        "db:generate": "prisma generate",
+        "db:push": "prisma db push",
+        "db:studio": "prisma studio"
+    },
+    "dependencies": {
+        "@prisma/client": "^5.22.0",
+        "axios": "^1.7.7",
+        "bcryptjs": "^2.4.3",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.5",
+        "express": "^4.21.1",
+        "express-rate-limit": "^7.4.1",
+        "jsonwebtoken": "^9.0.2",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "react-router-dom": "^6.28.0"
+    },
     "devDependencies": {
-        "concurrently": "^9.2.1"
+        "@types/react": "^18.3.12",
+        "@types/react-dom": "^18.3.1",
+        "@vitejs/plugin-react": "^4.3.3",
+        "concurrently": "^9.2.1",
+        "prisma": "^5.22.0",
+        "vite": "^5.4.10"
     }
 }
