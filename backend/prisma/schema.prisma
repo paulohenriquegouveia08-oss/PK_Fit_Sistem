@@ -1,0 +1,37 @@
+// Schema do banco de dados - PK Fit System
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password_hash String?
+  role          String    @default("ALUNO")
+  academy_id    String?
+  academy       Academy?  @relation(fields: [academy_id], references: [id])
+  first_access  Boolean   @default(true)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+}
+
+model Academy {
+  id               String    @id @default(cuid())
+  name             String
+  cnpj             String    @unique
+  responsible_name String?
+  phone            String?
+  status           String    @default("ACTIVE") // ACTIVE, INACTIVE
+  payment_status   String    @default("PENDING") // PAID, PENDING, OVERDUE, LATE
+  payment_plan     String?
+  payment_due_date DateTime?
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+  users            User[]
+}
